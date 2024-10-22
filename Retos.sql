@@ -23,6 +23,9 @@ INSERT INTO productos (codigo, nombre, precio, stock) VALUES
 SELECT * FROM productos WHERE nombre LIKE 'Q%';
 SELECT * FROM productos WHERE descripcion IS NULL;
 SELECT * FROM productos WHERE precio BETWEEN MONEY(2) AND MONEY(3);
+UPDATE productos 
+SET stock = 0 
+WHERE descripcion IS NULL;
 --Script 2
 CREATE TABLE cuentas (
     numero_cuenta CHAR(5) NOT NULL,
@@ -45,6 +48,9 @@ INSERT INTO cuentas (numero_cuenta, cedula_propietario, fecha_creacion, saldo) V
 SELECT numero_cuenta, saldo FROM cuentas;
 SELECT * FROM cuentas WHERE fecha_creacion >= CURRENT_DATE - INTERVAL '2 months';
 SELECT numero_cuenta, saldo FROM cuentas WHERE fecha_creacion >= CURRENT_DATE - INTERVAL '2 months';
+UPDATE cuentas 
+SET saldo = 10 
+WHERE cedula_propietario LIKE '17%';
 --Script 3
 CREATE TABLE estudiantes (
     cedula CHAR(10) NOT NULL,
@@ -54,6 +60,7 @@ CREATE TABLE estudiantes (
     fecha_nacimiento DATE NOT NULL,
     CONSTRAINT estudiantes_pk PRIMARY KEY (cedula)
 );
+
 INSERT INTO estudiantes (cedula, nombre, apellido, email, fecha_nacimiento) VALUES 
 ('1234567890', 'Juan', 'Pérez', 'juan.perez@example.com', '2000-01-01'),
 ('0987654321', 'María', 'Gómez', 'maria.gomez@example.com', '1999-05-15'),
@@ -66,6 +73,9 @@ INSERT INTO estudiantes (cedula, nombre, apellido, email, fecha_nacimiento) VALU
 SELECT nombre, cedula FROM estudiantes;
 SELECT nombre FROM estudiantes WHERE cedula LIKE '17%';
 SELECT CONCAT(nombre, ' ', apellido) AS nombre_completo FROM estudiantes WHERE nombre LIKE 'A%';
+UPDATE estudiantes 
+SET apellido = 'Hernández' 
+WHERE cedula LIKE '17%';
 --Script 4
 CREATE TABLE registros_entrada (
     codigo_registro INT NOT NULL,
@@ -88,6 +98,9 @@ INSERT INTO registros_entrada (codigo_registro, cedula_empleado, fecha, hora) VA
 SELECT cedula_empleado, fecha, hora FROM registros_entrada;
 SELECT * FROM registros_entrada WHERE hora BETWEEN '07:00:00' AND '14:00:00';
 SELECT * FROM registros_entrada WHERE hora > '08:00:00';
+UPDATE registros_entrada 
+SET cedula_empleado = '082345679' 
+WHERE EXTRACT(MONTH FROM fecha) = 8 AND EXTRACT(YEAR FROM fecha) = EXTRACT(YEAR FROM CURRENT_DATE);
 --Script 5
 CREATE TABLE videojuegos (
     codigo INT NOT NULL,
@@ -109,6 +122,9 @@ INSERT INTO videojuegos (codigo, nombre, valoracion) VALUES
 SELECT * FROM videojuegos WHERE nombre LIKE 'C%';
 SELECT * FROM videojuegos WHERE valoracion BETWEEN 9 AND 10;
 SELECT * FROM videojuegos WHERE descripcion IS NULL;
+UPDATE videojuegos 
+SET descripcion = 'Mejor puntuado' 
+WHERE valoracion > 9;
 --Script 6
 CREATE TABLE transacciones (
     codigo INT NOT NULL,
@@ -133,3 +149,8 @@ INSERT INTO transacciones (codigo, numero_cuenta, monto, tipo, fecha, hora) VALU
 SELECT * FROM transacciones WHERE tipo = 'D';
 SELECT * FROM transacciones WHERE monto BETWEEN MONEY(200) AND MONEY(2000);
 SELECT codigo, monto, tipo, fecha FROM transacciones WHERE fecha IS NOT NULL;
+UPDATE transacciones 
+SET tipo = 'T' 
+WHERE monto > MONEY(100) AND monto < MONEY(500) 
+  AND EXTRACT(MONTH FROM fecha) = 9 
+  AND EXTRACT(HOUR FROM hora) BETWEEN 14 AND 20;
