@@ -26,6 +26,8 @@ SELECT * FROM productos WHERE precio BETWEEN MONEY(2) AND MONEY(3);
 UPDATE productos 
 SET stock = 0 
 WHERE descripcion IS NULL;
+DELETE FROM productos 
+WHERE descripcion IS NULL;
 --Script 2
 CREATE TABLE cuentas (
     numero_cuenta CHAR(5) NOT NULL,
@@ -51,6 +53,8 @@ SELECT numero_cuenta, saldo FROM cuentas WHERE fecha_creacion >= CURRENT_DATE - 
 UPDATE cuentas 
 SET saldo = 10 
 WHERE cedula_propietario LIKE '17%';
+DELETE FROM cuentas 
+WHERE cedula_propietario LIKE '10%';
 --Script 3
 CREATE TABLE estudiantes (
     cedula CHAR(10) NOT NULL,
@@ -76,6 +80,8 @@ SELECT CONCAT(nombre, ' ', apellido) AS nombre_completo FROM estudiantes WHERE n
 UPDATE estudiantes 
 SET apellido = 'Hernández' 
 WHERE cedula LIKE '17%';
+DELETE FROM estudiantes 
+WHERE cedula LIKE '%05';
 --Script 4
 CREATE TABLE registros_entrada (
     codigo_registro INT NOT NULL,
@@ -101,6 +107,9 @@ SELECT * FROM registros_entrada WHERE hora > '08:00:00';
 UPDATE registros_entrada 
 SET cedula_empleado = '082345679' 
 WHERE EXTRACT(MONTH FROM fecha) = 8 AND EXTRACT(YEAR FROM fecha) = EXTRACT(YEAR FROM CURRENT_DATE);
+DELETE FROM registros_entrada 
+WHERE EXTRACT(MONTH FROM fecha) = 6 
+  AND EXTRACT(YEAR FROM fecha) = EXTRACT(YEAR FROM CURRENT_DATE);
 --Script 5
 CREATE TABLE videojuegos (
     codigo INT NOT NULL,
@@ -125,6 +134,8 @@ SELECT * FROM videojuegos WHERE descripcion IS NULL;
 UPDATE videojuegos 
 SET descripcion = 'Mejor puntuado' 
 WHERE valoracion > 9;
+DELETE FROM videojuegos 
+WHERE valoracion < 7;
 --Script 6
 CREATE TABLE transacciones (
     codigo INT NOT NULL,
@@ -154,3 +165,7 @@ SET tipo = 'T'
 WHERE monto > MONEY(100) AND monto < MONEY(500) 
   AND EXTRACT(MONTH FROM fecha) = 9 
   AND EXTRACT(HOUR FROM hora) BETWEEN 14 AND 20;
+DELETE FROM transacciones 
+WHERE EXTRACT(MONTH FROM fecha) = 8 
+  AND EXTRACT(YEAR FROM fecha) = EXTRACT(YEAR FROM CURRENT_DATE) 
+  AND EXTRACT(HOUR FROM hora) BETWEEN 14 AND 18;
