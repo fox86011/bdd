@@ -8,7 +8,6 @@ CREATE TABLE productos (
     stock INT NOT NULL,
     CONSTRAINT productos_pk PRIMARY KEY (codigo)
 );
-
 INSERT INTO productos (codigo, nombre, descripcion, precio, stock) VALUES 
 (1, 'Producto A', 'Descripción del producto A', 10.00, 100),
 (2, 'Producto B', 'Descripción del producto B', 15.50, 200),
@@ -19,7 +18,6 @@ INSERT INTO productos (codigo, nombre, precio, stock) VALUES
 (6, 'Producto F', 12.00, 120),
 (7, 'Producto G', 8.50, 60),
 (8, 'Producto H', 25.00, 90);
-
 SELECT * FROM productos WHERE nombre LIKE 'Q%';
 SELECT * FROM productos WHERE descripcion IS NULL;
 SELECT * FROM productos WHERE precio BETWEEN MONEY(2) AND MONEY(3);
@@ -64,7 +62,6 @@ CREATE TABLE estudiantes (
     fecha_nacimiento DATE NOT NULL,
     CONSTRAINT estudiantes_pk PRIMARY KEY (cedula)
 );
-
 INSERT INTO estudiantes (cedula, nombre, apellido, email, fecha_nacimiento) VALUES 
 ('1234567890', 'Juan', 'Pérez', 'juan.perez@example.com', '2000-01-01'),
 ('0987654321', 'María', 'Gómez', 'maria.gomez@example.com', '1999-05-15'),
