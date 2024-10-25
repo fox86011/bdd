@@ -166,3 +166,88 @@ DELETE FROM transacciones
 WHERE EXTRACT(MONTH FROM fecha) = 8 
   AND EXTRACT(YEAR FROM fecha) = EXTRACT(YEAR FROM CURRENT_DATE) 
   AND EXTRACT(HOUR FROM hora) BETWEEN 14 AND 18;
+-- 1. Usuarios y Cuentas
+-- Consulta: Obtener los números de cuenta y saldos entre $100 y $1000
+SELECT numero_cuenta, saldo 
+FROM cuentas 
+WHERE saldo BETWEEN MONEY(100) AND MONEY(1000);
+
+-- Subconsulta: Cuentas con fecha de creación entre '2022-09-21' y '2023-09-21'
+SELECT * 
+FROM cuentas 
+WHERE fecha_creacion BETWEEN '2022-09-21' AND '2023-09-21';
+
+-- 2. Registros de Entrada y Empleado
+-- Consulta: Registros específicos según múltiples criterios
+SELECT re.cedula_empleado, re.fecha, re.hora
+FROM registros_entrada re
+WHERE (re.fecha BETWEEN '2023-08-01' AND '2023-08-31')
+   OR (re.cedula_empleado LIKE '17%' AND re.hora BETWEEN '08:00:00' AND '12:00:00')
+   OR (re.fecha BETWEEN '2023-10-06' AND '2023-10-20' 
+       AND re.cedula_empleado LIKE '08%' 
+       AND re.hora BETWEEN '09:00:00' AND '13:00:00');
+
+-- 3. Productos y Ventas
+-- Consulta: Productos con 'm' en el nombre o sin descripción
+SELECT nombre, stock 
+FROM productos 
+WHERE nombre LIKE '%m%' 
+   OR descripcion IS NULL;
+
+-- Subconsulta: Productos relacionados a ventas con cantidad 5 (Adaptada ya que no existe tabla ventas)
+SELECT nombre, stock 
+FROM productos 
+WHERE codigo IN (SELECT codigo FROM productos WHERE stock = 5);
+
+-- 4. Transacciones y Banco
+-- Consulta: Transacciones tipo 'C' con número de cuenta específico
+SELECT * 
+FROM transacciones 
+WHERE tipo = 'C' 
+  AND numero_cuenta BETWEEN '22001' AND '22004';
+
+-- 5. Videojuegos
+-- Consulta: Videojuegos según criterios específicos
+SELECT nombre, descripcion, valoracion
+FROM videojuegos
+WHERE (descripcion LIKE '%Guerra%' AND valoracion > 7)
+   OR (nombre LIKE 'C%' AND valoracion > 8)
+   OR (descripcion LIKE 'D%' AND valoracion > 8);
+
+-- 6. Estudiantes
+-- Consulta: Estudiantes con 'n' en el apellido
+SELECT nombre, apellido 
+FROM estudiantes 
+WHERE apellido LIKE '%n%';
+
+-- 7. Productos con filtros específicos
+-- Consulta: Productos en rango de precio
+SELECT * 
+FROM productos 
+WHERE precio BETWEEN MONEY(100) AND MONEY(1000);
+
+-- 8. Cuentas con saldo específico
+-- Consulta: Cuentas con saldo mayor a un valor
+SELECT numero_cuenta, saldo 
+FROM cuentas 
+WHERE saldo > MONEY(1000);
+
+-- 9. Transacciones por fecha
+-- Consulta: Transacciones en rango de fechas
+SELECT codigo, numero_cuenta, monto, tipo 
+FROM transacciones 
+WHERE fecha BETWEEN '2023-01-01' AND '2023-12-31';
+
+-- 10. Videojuegos sin descripción
+-- Consulta: Videojuegos que necesitan descripción
+SELECT codigo, nombre, valoracion 
+FROM videojuegos 
+WHERE descripcion IS NULL;
+
+-- Subconsulta: Videojuegos con valoración mayor al promedio
+SELECT nombre, valoracion
+FROM videojuegos
+WHERE valoracion > (
+    SELECT AVG(valoracion)
+    FROM videojuegos
+);
