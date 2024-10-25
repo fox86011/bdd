@@ -251,3 +251,105 @@ WHERE valoracion > (
     SELECT AVG(valoracion)
     FROM videojuegos
 );
+-- 1. Cuentas
+-- Función de agregación 1: Saldo promedio de cuentas por cedula
+SELECT cedula_propietario, ROUND(AVG(CAST(saldo AS decimal)), 2) as saldo_promedio
+FROM cuentas
+GROUP BY cedula_propietario;
+
+-- 2. Productos
+-- Función de agregación 1: Máximo precio de productos
+SELECT MAX(precio) as precio_maximo
+FROM productos;
+
+-- Función de agregación 2: Total de productos en stock
+SELECT SUM(stock) as total_productos
+FROM productos;
+
+-- 3. Estudiantes
+-- Función de agregación 1: Edad promedio de estudiantes
+SELECT ROUND(AVG(
+    EXTRACT(YEAR FROM CURRENT_DATE) - 
+    EXTRACT(YEAR FROM fecha_nacimiento)
+)) as edad_promedio
+FROM estudiantes;
+
+-- Función de agregación 2: Conteo de estudiantes por inicial de apellido
+SELECT LEFT(apellido, 1) as inicial, COUNT(*) as cantidad
+FROM estudiantes
+GROUP BY LEFT(apellido, 1)
+ORDER BY inicial;
+
+-- 4. Transacciones
+-- Función de agregación 1: Cantidad de transacciones tipo 'C'
+SELECT COUNT(*) as total_creditos
+FROM transacciones
+WHERE tipo = 'C';
+
+-- Función de agregación 2: Promedio de montos por número de cuenta
+SELECT numero_cuenta, 
+       ROUND(AVG(CAST(monto AS decimal)), 2) as monto_promedio
+FROM transacciones
+GROUP BY numero_cuenta;
+
+-- 5. Videojuegos
+-- Función de agregación 1: Conteo de videojuegos por valoración
+SELECT valoracion, COUNT(*) as cantidad
+FROM videojuegos
+GROUP BY valoracion
+ORDER BY valoracion;
+
+-- Función de agregación 2: Valoración promedio de videojuegos
+SELECT ROUND(AVG(valoracion), 2) as valoracion_promedio
+FROM videojuegos;
+
+-- 6. Registros de entrada
+-- Función de agregación 1: Cantidad de registros por empleado
+SELECT cedula_empleado, COUNT(*) as total_registros
+FROM registros_entrada
+GROUP BY cedula_empleado;
+
+-- Función de agregación 2: Fecha mínima y máxima de registros
+SELECT 
+    MIN(fecha) as primera_fecha,
+    MAX(fecha) as ultima_fecha
+FROM registros_entrada;
+
+-- Consultas adicionales útiles
+
+-- Total de productos sin descripción
+SELECT COUNT(*) as productos_sin_descripcion
+FROM productos
+WHERE descripcion IS NULL;
+
+-- Promedio de saldo por mes de creación de cuenta
+SELECT 
+    EXTRACT(MONTH FROM fecha_creacion) as mes,
+    ROUND(AVG(CAST(saldo AS decimal)), 2) as saldo_promedio
+FROM cuentas
+GROUP BY EXTRACT(MONTH FROM fecha_creacion)
+ORDER BY mes;
+
+-- Distribución de transacciones por tipo
+SELECT 
+    tipo,
+    COUNT(*) as cantidad,
+    ROUND(AVG(CAST(monto AS decimal)), 2) as monto_promedio
+FROM transacciones
+GROUP BY tipo;
+
+-- Estadísticas de valoración de videojuegos
+SELECT 
+    MIN(valoracion) as min_valoracion,
+    MAX(valoracion) as max_valoracion,
+    ROUND(AVG(valoracion), 2) as promedio_valoracion,
+    COUNT(*) as total_juegos
+FROM videojuegos;
+
+-- Distribución de registros de entrada por hora
+SELECT 
+    EXTRACT(HOUR FROM hora) as hora_entrada,
+    COUNT(*) as cantidad_registros
+FROM registros_entrada
+GROUP BY EXTRACT(HOUR FROM hora)
+ORDER BY hora_entrada;
